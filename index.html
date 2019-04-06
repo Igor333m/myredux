@@ -19,7 +19,9 @@
   </div>
   <script type='text/javascript'>
     
-    function createStore () {
+    // Library code
+    
+    function createStore (reducer) {
       // 1. The state
       // 2. Get the state
       // 3. Listen to changes on the state
@@ -38,13 +40,36 @@
         }
       }
 
+      /*
+      *   Ressponsible for updating the state inside store
+      */
+      const dispatch = (action) => {
+        state = reducer(state, action);
+        listeners.forEach( (listerner) => listener() );
+      }
+
       return {
         getState,
-        listeners
+        listeners,
+        dispatch
       }
     }
 
-    const store = createStore();
+    // App code
+
+    /*
+    *   Reducer as a pure function
+    *   Get state and action and returns new state
+    */
+    function todos (state = [], action) {
+
+      if (action === 'ADD_TODO') {
+        return state.concat([action.todo]);
+      }
+        return state;
+    }
+
+    const store = createStore(todos);
 
   </script>
 </body>
