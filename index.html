@@ -77,43 +77,36 @@
 
     /*
     *  goals reducer as a pure function
-    *   Get state and action and returns new state
+    *  Get state and action and returns new state
     */
     function goals (state = [], action) {
       switch (action.type) {
         case 'ADD_GOAL' :
           return state.concat([action.goal]);
-        case 'REMOVE_TODO' :
+        case  'REMOVE_GOAL' :
           return state.filter( (goal) => goal.id !== action.id );
         default:
           return state;
-
+      }
     }
-    
-    // createStore takes one reducer function as an argument
-    const store = createStore(todos);
+
+    /*
+    *   Root reducer
+    */
+    function app (state = {}, action) {
+      return {
+        todos: todos(state.todos, action),
+        goals: goals(state.goals, action)
+      };
+    }
+
+    // createStore can take only one reducer function as an argument
+    const store = createStore(app);
 
     store.subscribe(() => {
-      console.log('The new state is: ', store.getState())
+      console.log('The new state is: ', store.getState());
     });
 
-    store.dispatch({
-      type: 'ADD_TODO',
-      todo: {
-        id: 0,
-        name: 'Learn Redux',
-        complete: false
-      }
-    });
-
-    store.dispatch({
-      type: 'ADD_TODO',
-      todo: {
-        id: 1,
-        name: 'Read a book.',
-        complete: true
-      }
-    });
 
   </script>
 </body>
