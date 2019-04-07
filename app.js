@@ -1,41 +1,42 @@
 function generateId () {
   return Math.random().toString(36).substring(2) + (new Date()).getTime().toString(36);
 }
-// Library code
 
-function createStore (reducer) {
-  // 1. The state
-  // 2. Get the state
-  // 3. Listen to changes on the state
-  // 4. Update the state
+// Library code changed with Redux
 
-  let state;
-  let listeners = [];
+// function createStore (reducer) {
+//   // 1. The state
+//   // 2. Get the state
+//   // 3. Listen to changes on the state
+//   // 4. Update the state
 
-  const getState = () => state;
+//   let state;
+//   let listeners = [];
 
-  const subscribe = (listener) => {
-    listeners.push(listener);
-    return () => {
-      listeners = listeners.filter((l) => l !== listener);
-    };
-  }
+//   const getState = () => state;
 
-  /*
-  *   Responsible for updating the state inside store
-  *   @param {object} action - Action object
-  */
-  const dispatch = (action) => {
-    state = reducer(state, action);
-    listeners.forEach( (listener) => listener() );
-  }
+//   const subscribe = (listener) => {
+//     listeners.push(listener);
+//     return () => {
+//       listeners = listeners.filter((l) => l !== listener);
+//     };
+//   }
 
-  return {
-    getState,
-    subscribe,
-    dispatch
-  }
-}
+//   /*
+//   *   Responsible for updating the state inside store
+//   *   @param {object} action - Action object
+//   */
+//   const dispatch = (action) => {
+//     state = reducer(state, action);
+//     listeners.forEach( (listener) => listener() );
+//   }
+
+//   return {
+//     getState,
+//     subscribe,
+//     dispatch
+//   }
+// }
 
 // App code
 
@@ -115,17 +116,22 @@ function goals (state = [], action) {
 }
 
 /*
-*   Root reducer
+*   Root reducer changed with Redux.combineReducers
 */
-function app (state = {}, action) {
-  return {
-    todos: todos(state.todos, action),
-    goals: goals(state.goals, action)
-  };
-}
+// function app (state = {}, action) {
+//   return {
+//     todos: todos(state.todos, action),
+//     goals: goals(state.goals, action)
+//   };
+// }
 
 // createStore can take only one reducer function as an argument
-const store = createStore(app);
+// change custom store with Redux store
+//const store = createStore(app);
+const store = Redux.createStore(Redux.combineReducers({
+  todos,
+  goals
+}));
 
 store.subscribe(() => {
   console.log(store.getState());
