@@ -22,9 +22,9 @@ function generateId () {
 //     };
 //   }
 
-//   /*
-//   *   Responsible for updating the state inside store
-//   *   @param {object} action - Action object
+//   /**
+//    *   Responsible for updating the state inside store
+//    *   @param {object} action - Action object
 //   */
 //   const dispatch = (action) => {
 //     state = reducer(state, action);
@@ -82,9 +82,9 @@ function removeGoalAction (id) {
   }
 }
 
-/*
-*  todos reducer as a pure function
-*   Get state and action and returns new state
+/**
+ *  todos reducer as a pure function
+ *   Get state and action and returns new state
 */
 function todos (state = [], action) {
   switch (action.type) {
@@ -100,9 +100,9 @@ function todos (state = [], action) {
   }
 }
 
-/*
-*  goals reducer as a pure function
-*  Get state and action and returns new state
+/**
+ *  goals reducer as a pure function
+ *  Get state and action and returns new state
 */
 function goals (state = [], action) {
   switch (action.type) {
@@ -115,8 +115,31 @@ function goals (state = [], action) {
   }
 }
 
-/*
-*   Root reducer changed with Redux.combineReducers
+/**
+ *   Middleware, hooked after action is dispatched but before
+ *   it hits the reduser and modified the state
+ *   Check if the new item contains the word 'bitcoin'
+*/
+function checkAndDispatch (store, action) {
+  if (
+    action.type === ADD_TODO && 
+    action.todo.name.toLowerCase().includes('bitcoin')
+  ) {
+    return alert("Nope. That's a bad idea.");
+  }
+
+  if (
+    action.type === ADD_GOAL && 
+    action.goal.name.toLowerCase().includes('bitcoin')
+  ) {
+    return alert("Nope. That's a bad idea.");
+  }
+
+  return store.dispatch(action);
+}
+
+/**
+ *   Root reducer changed with Redux.combineReducers
 */
 // function app (state = {}, action) {
 //   return {
@@ -125,9 +148,11 @@ function goals (state = [], action) {
 //   };
 // }
 
-// createStore can take only one reducer function as an argument
-// change custom store with Redux store
-//const store = createStore(app);
+/**
+ *   createStore can take only one reducer function as an argument
+ *   change custom store with Redux store
+ *    const store = createStore(app);
+*/
 const store = Redux.createStore(Redux.combineReducers({
   todos,
   goals
@@ -151,7 +176,7 @@ function addTodo () {
   const name = input.value;
   input.value = '';
 
-  store.dispatch(addTodoAction({
+  checkAndDispatch(store, addTodoAction({
     name,
     complete: false,
     id: generateId()
@@ -163,7 +188,7 @@ function addGoal () {
   const name = input.value;
   input.value = '';
 
-  store.dispatch(addGoalAction({
+  checkAndDispatch(store, addGoalAction({
     name,
     id: generateId()
   }));
@@ -187,14 +212,14 @@ function addTodoToDOM (todo) {
   const text = document.createTextNode(todo.name);
 
   const removeBtn = createRemoveButton( () => {
-    store.dispatch(removeTodoAction(todo.id));
+    checkAndDispatch(store, removeTodoAction(todo.id));
   });
 
   node.appendChild(text);
   node.appendChild(removeBtn);
   node.style.textDecoration = todo.complete ? 'line-through' : 'none';
   node.addEventListener('click', () => {
-    store.dispatch(toggleTodoAction(todo.id));
+    checkAndDispatch(store, toggleTodoAction(todo.id));
   });
 
   document.getElementById('todos').appendChild(node);
@@ -205,7 +230,7 @@ function addGoalToDOM (goal) {
   const text = document.createTextNode(goal.name);
 
   const removeBtn = createRemoveButton( () => {
-    store.dispatch(removeGoalAction(goal.id));
+    checkAndDispatch(store, removeGoalAction(goal.id));
   });
 
   node.appendChild(text);
