@@ -169,6 +169,21 @@ const checker = (store) => (next) => (action) => {
 }
 
 /**
+ *  logger middleware intercept all dispatch calls and
+ *  log out what the action is that's being dispatched and
+ *  what the state changes to after the reducer has run.
+ */
+const logger = (store) => (next) => (action) => {
+  console.group(action.type);
+    console.log('The action: ', action);
+    const result = next(action);
+    console.log('The new state: ', store.getState());
+  console.groupEnd();
+  return result;
+}
+
+
+/**
  *   Root reducer changed with Redux.combineReducers
 */
 // function app (state = {}, action) {
@@ -188,7 +203,7 @@ const checker = (store) => (next) => (action) => {
 const store = Redux.createStore(Redux.combineReducers({
   todos,
   goals
-}), Redux.applyMiddleware(checker));
+}), Redux.applyMiddleware(checker, logger));
 
 store.subscribe(() => {
   console.log(store.getState());
