@@ -198,7 +198,7 @@ const logger = (store) => (next) => (action) => {
  *  change custom store with Redux store
  *  const store = createStore(app);
  *  @param { Redux.combineReducers } - Pass all reducers as arguments
- *  @param { Redux.applyMiddleware } - Pass middleware as argument
+ *  @param { Redux.applyMiddleware } - Pass middlewares as arguments
 */
 const store = Redux.createStore(Redux.combineReducers({
   todos,
