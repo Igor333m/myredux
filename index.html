@@ -30,7 +30,13 @@
     function List(props) {
       return (
         <ul>
-          <li>List</li>
+          {props.items.map( item => (
+            <li key={item.id}>
+              <span>
+                {item.name}
+              </span>
+            </li>
+          ))}
         </ul>
       );
     }
@@ -60,7 +66,7 @@
             />
             <button onClick={this.addItem}>Add Todo</button>
 
-            <List />
+            <List items={this.props.todos}/>
           </div>
         );
       }
@@ -91,18 +97,27 @@
             />
             <button onClick={this.addItem}>Add Goal</button>
 
-            <List />
+            <List items={this.props.goals}/>
           </div>
         );
       }
     }
 
     class App extends React.Component {
+      componentDidMount () {
+        const { store } = this.props;
+
+        store.subscribe(() => this.forceUpdate());
+      }
+
       render () {
+        const { store } = this.props;
+        const { todos, goals } = store.getState();
+
         return (
           <div>
-            <Todos store={this.props.store} />
-            <Goals store={this.props.store}/>  
+            <Todos todos={todos} store={this.props.store} />
+            <Goals goals={goals} store={this.props.store} />  
           </div>
         );
       }
