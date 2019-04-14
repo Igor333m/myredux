@@ -76,10 +76,16 @@
           .catch(() => {
             this.props.store.dispatch(addTodoAction(todo));
             alert('Something went wrong. Try again');
-          })
+          });
       }
       toggleItem = id => {
         this.props.store.dispatch(toggleTodoAction(id));
+
+        return API.saveTodoToggle(id)
+          .catch(() => {
+            this.props.store.dispatch(toggleTodoAction(id));
+            alert('Something went wrong. Try again');
+          });
       }
       render () {
         return (
