@@ -62,8 +62,21 @@
         }));
 
       }
+
+       /**
+       *  Instead of waiting for confirmation from the server,
+       *  just instantly remove the todo, if errors add the goal back in.
+       *  Technique called optimistic updates
+       * 
+      */
       removeItem = todo => {
         this.props.store.dispatch(removeTodoAction(todo.id));
+
+        return API.deleteTodo(todo.id)
+          .catch(() => {
+            this.props.store.dispatch(addTodoAction(todo));
+            alert('Something went wrong. Try again');
+          })
       }
       toggleItem = id => {
         this.props.store.dispatch(toggleTodoAction(id));
@@ -102,8 +115,21 @@
           id: generateId()
         }));
       }
+
+      /**
+       *  Instead of waiting for confirmation from the server,
+       *  just instantly remove the goal, if errors add the goal back in.
+       *  Technique called optimistic updates
+       * 
+      */
       removeItem = goal => {
         this.props.store.dispatch(removeGoalAction(goal.id));
+
+        API.deleteGoal(goal.id)
+          .then(() => {
+            this.props.store.dispatch(addGoalAction(goal));
+            alert('Something went wrong. Try again');
+          })
       }
       render () {
         return (
