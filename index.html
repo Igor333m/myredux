@@ -52,15 +52,14 @@
       addItem = (e) => {
         e.preventDefault();
 
-        const name = this.input.value;
-        this.input.value = '';
-
-        this.props.store.dispatch(addTodoAction({
-          name,
-          complete: false,
-          id: generateId()
-        }));
-
+        return API.saveTodo(this.input.value)
+          .then((todo) => {
+            this.props.store.dispatch(addTodoAction(todo));
+            this.input.value = '';
+          })
+          .catch(() => {
+            alert('Something went wrong. Try again');
+          });
       }
 
        /**
@@ -113,13 +112,14 @@
       addItem = (e) => {
         e.preventDefault();
 
-        const name = this.input.value;
-        this.input.value = '';
-
-        this.props.store.dispatch(addGoalAction({
-          name,
-          id: generateId()
-        }));
+        return API.saveGoal(this.input.value)
+          .then((goal) => {
+            this.props.store.dispatch(addGoalAction(goal));
+            this.input.value = '';
+          })
+          .catch(() => {
+            alert('Something went wrong. Try again');
+          });
       }
 
       /**
