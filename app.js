@@ -135,6 +135,21 @@ function goals (state = [], action) {
   }
 }
 
+/**
+ *  loading reducer as a pure function
+ *  Set loading while data is fetching form server
+ *  @param { state } - Default state set loading to true
+ *  @param { action } - Action creator function
+ *  @returns { boolean } - Return boolean
+*/
+function loading (state = true, action) {
+  switch (action.type) {
+    case RECEIVE_DATA :
+      return false;
+    default :
+      return state;
+  }
+}
 
 /**
  *   Custom middleware, hooked after action is dispatched but before
@@ -215,7 +230,8 @@ const logger = (store) => (next) => (action) => {
 */
 const store = Redux.createStore(Redux.combineReducers({
   todos,
-  goals
+  goals,
+  loading
 }), Redux.applyMiddleware(checker, logger));
 
 store.subscribe(() => {
