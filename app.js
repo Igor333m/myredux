@@ -93,10 +93,35 @@ function removeGoalAction (id) {
 }
 
 /**
+ *  handleDeleteTodo action creator with data fetching logic
+ *  Use REDUX-THUNK middleware as a wrapper for the store’s dispatch() method;
+ *   rather than returning action objects, we can use thunk action creators
+ *   to dispatch functions (or even or Promises).
+ *
+ *  Instead of waiting for confirmation from the server,
+ *  just instantly remove the todo, if errors add the goal back in.
+ *  Technique called optimistic updates
+ *
+ *  @param { todo } - Todo
+ *  @returns { object or function } - Return action object or function
+*/
+function handleDeleteTodo (todo) {
+  return (dispatch) => {
+    dispatch(removeTodoAction(todo.id));
+
+    return API.deleteTodo(todo.id)
+      .catch(() => {
+        dispatch(addTodoAction(todo));
+        alert('Something went wrong. Try again');
+      });
+  }
+}
+
+/**
  *  todos reducer as a pure function
  *  Get state and action and returns new state
  *  @param { state } - Current state
- *  @param { action } - Action creator function
+ *  @param { action } - Action object
  *  @returns { state } - Returns a new state
 */
 function todos (state = [], action) {
@@ -119,7 +144,7 @@ function todos (state = [], action) {
  *  goals reducer as a pure function
  *  Get state and action and returns new state
  *  @param { state } - Current state
- *  @param { action } - Action creator function
+ *  @param { action } - Action object
  *  @returns { state } - Returns a new state
 */
 function goals (state = [], action) {
@@ -232,11 +257,11 @@ const store = Redux.createStore(Redux.combineReducers({
   todos,
   goals,
   loading
-}), Redux.applyMiddleware(checker, logger));
+}), Redux.applyMiddleware(ReduxThunk.default, checker, logger));
 
 store.subscribe(() => {
   console.log(store.getState());
-  const { goals, todos } = store.getState();
+  // const { goals, todos } = store.getState();
 
   // document.getElementById('goals').innerHTML = '';
   // document.getElementById('todos').innerHTML = '';

@@ -7,6 +7,7 @@
   <script src="https://unpkg.com/react-dom@16.3.0-alpha.1/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
   <script src="https://tylermcginnis.com/goals-todos-api/index.js"></script>
+  <script src="https://unpkg.com/redux-thunk@2.2.0/dist/redux-thunk.min.js"></script>
 </head>
 <body>
   <!-- ___Vanilla js app___
@@ -62,20 +63,8 @@
           });
       }
 
-       /**
-       *  Instead of waiting for confirmation from the server,
-       *  just instantly remove the todo, if errors add the goal back in.
-       *  Technique called optimistic updates
-       * 
-      */
       removeItem = todo => {
-        this.props.store.dispatch(removeTodoAction(todo.id));
-
-        return API.deleteTodo(todo.id)
-          .catch(() => {
-            this.props.store.dispatch(addTodoAction(todo));
-            alert('Something went wrong. Try again');
-          });
+        this.props.store.dispatch(handleDeleteTodo(todo));
       }
       toggleItem = id => {
         this.props.store.dispatch(toggleTodoAction(id));
@@ -126,7 +115,6 @@
        *  Instead of waiting for confirmation from the server,
        *  just instantly remove the goal, if errors add the goal back in.
        *  Technique called optimistic updates
-       * 
       */
       removeItem = goal => {
         this.props.store.dispatch(removeGoalAction(goal.id));
