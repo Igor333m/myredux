@@ -97,7 +97,6 @@ function removeGoalAction (id) {
  *  Use REDUX-THUNK middleware as a wrapper for the store’s dispatch() method;
  *   rather than returning action objects, we can use thunk action creators
  *   to dispatch functions (or even or Promises).
- *
  *  Instead of waiting for confirmation from the server,
  *  just instantly remove the todo, if errors add the goal back in.
  *  Technique called optimistic updates
@@ -112,6 +111,28 @@ function handleDeleteTodo (todo) {
     return API.deleteTodo(todo.id)
       .catch(() => {
         dispatch(addTodoAction(todo));
+        alert('Something went wrong. Try again');
+      });
+  }
+}
+
+/**
+ *  handleAddGoal action creator with data fetching logic
+ *  Use REDUX-THUNK middleware as a wrapper for the store’s dispatch() method;
+ *   rather than returning action objects, we can use thunk action creators
+ *   to dispatch functions (or even or Promises).
+ *  @param { name } - Add goal string
+ *  @param { callback } - Call callback to reset the input value
+ *  @returns { object or function } - Return action object or function
+*/
+function handleAddGoal(name, callback) {
+  return (dispatch) => {
+    return API.saveGoal(name)
+      .then((goal) => {
+        dispatch(addGoalAction(goal));
+        callback();
+      })
+      .catch(() => {
         alert('Something went wrong. Try again');
       });
   }

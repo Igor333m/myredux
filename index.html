@@ -100,15 +100,10 @@
 
       addItem = (e) => {
         e.preventDefault();
-
-        return API.saveGoal(this.input.value)
-          .then((goal) => {
-            this.props.store.dispatch(addGoalAction(goal));
-            this.input.value = '';
-          })
-          .catch(() => {
-            alert('Something went wrong. Try again');
-          });
+        this.props.store.dispatch(handleAddGoal(
+          this.input.value,
+          () => this.input.value = ''
+        ));
       }
 
       /**
