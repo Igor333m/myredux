@@ -112,14 +112,9 @@
        *  Technique called optimistic updates
       */
       removeItem = goal => {
-        this.props.store.dispatch(removeGoalAction(goal.id));
-
-        API.deleteGoal(goal.id)
-          .then(() => {
-            this.props.store.dispatch(addGoalAction(goal));
-            alert('Something went wrong. Try again');
-          })
+        this.props.store.dispatch(handleDeleteGoal(goal));
       }
+      
       render () {
         return (
           <div>
