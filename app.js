@@ -151,6 +151,18 @@ function handleAddTodo (name, callback) {
   }
 }
 
+function handleToggle (id) {
+  return (dispatch) => {
+    dispatch(toggleTodoAction(id));
+
+    return API.saveTodoToggle(id)
+      .catch(() => {
+        dispatch(toggleTodoAction(id));
+        alert('Something went wrong. Try again');
+      });
+  }
+}
+
 /**
  *  handleDeleteGoal action creator with data fetching logic
  *  Use REDUX-THUNK middleware as a wrapper for the store’s dispatch() method;

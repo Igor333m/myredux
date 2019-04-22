@@ -63,13 +63,7 @@
         this.props.store.dispatch(handleDeleteTodo(todo));
       }
       toggleItem = id => {
-        this.props.store.dispatch(toggleTodoAction(id));
-
-        return API.saveTodoToggle(id)
-          .catch(() => {
-            this.props.store.dispatch(toggleTodoAction(id));
-            alert('Something went wrong. Try again');
-          });
+        this.props.store.dispatch(handleToggle(id));
       }
       render () {
         return (
