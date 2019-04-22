@@ -129,13 +129,7 @@
       componentDidMount () {
         const { store } = this.props;
 
-        /**
-       *  Get asynchronous data from https://tylermcginnis.com/goals-todos-api/index.js
-      */ 
-      Promise.all([API.fetchGoals(), API.fetchTodos()])
-      .then(([todos, goals]) => {
-        store.dispatch(receiveDataAction(todos, goals));
-      })
+        store.dispatch(handleInitialData());
 
         store.subscribe(() => this.forceUpdate());
       }

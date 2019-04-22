@@ -92,6 +92,18 @@ function removeGoalAction (id) {
   }
 }
 
+function handleInitialData () {
+  return (dispatch) => {
+    /**
+     *  Get asynchronous data from https://tylermcginnis.com/goals-todos-api/index.js
+    */ 
+    return Promise.all([API.fetchGoals(), API.fetchTodos()])
+    .then(([todos, goals]) => {
+      dispatch(receiveDataAction(todos, goals));
+    });
+  }
+}
+
 /**
  *  handleDeleteTodo action creator with data fetching logic
  *  Use REDUX-THUNK middleware as a wrapper for the store’s dispatch() method;
