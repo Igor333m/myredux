@@ -1,6 +1,3 @@
-/**
- *  ORIGINAL FILE
- */
 function generateId () {
   return Math.random().toString(36).substring(2) + (new Date()).getTime().toString(36);
 }
@@ -201,11 +198,64 @@ function handleDeleteGoal(goal) {
   }
 }
 
+/**
+ *  todos reducer as a pure function
+ *  Get state and action and returns new state
+ *  @param { state } - Current state
+ *  @param { action } - Action object
+ *  @returns { state } - Returns a new state
+*/
+function todos (state = [], action) {
+  switch (action.type) {
+    case ADD_TODO :
+      return state.concat([action.todo]);
+    case REMOVE_TODO :
+      return state.filter( (todo) => todo.id !== action.id );
+    case TOGGLE_TODO :
+      return state.map( (todo) => todo.id !== action.id ? todo : 
+        Object.assign({}, todo, { complete: !todo.complete }));
+    case RECEIVE_DATA :
+      return action.todos;
+    default :
+      return state;
+  }
+}
 
+/**
+ *  goals reducer as a pure function
+ *  Get state and action and returns new state
+ *  @param { state } - Current state
+ *  @param { action } - Action object
+ *  @returns { state } - Returns a new state
+*/
+function goals (state = [], action) {
+  switch (action.type) {
+    case ADD_GOAL :
+      return state.concat([action.goal]);
+    case  REMOVE_GOAL :
+      return state.filter( (goal) => goal.id !== action.id );
+    case RECEIVE_DATA :
+      return action.goals;
+    default:
+      return state;
+  }
+}
 
-
-
-
+/**
+ *  loading reducer as a pure function
+ *  Set loading while data is fetching form server
+ *  @param { state } - Default state set loading to true
+ *  @param { action } - Action creator function
+ *  @returns { boolean } - Return boolean
+*/
+function loading (state = true, action) {
+  switch (action.type) {
+    case RECEIVE_DATA :
+      return false;
+    default :
+      return state;
+  }
+}
 
 /**
  *   Custom middleware, hooked after action is dispatched but before
